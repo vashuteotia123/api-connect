@@ -1,0 +1,98 @@
+svg {
+  max-width: 100%;
+}
+
+@-webkit-keyframes spin {
+  to {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
+}
+
+@keyframes spin {
+  to {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
+}
+.loader {
+  -webkit-animation: spin 1s ease-in-out infinite alternate both;
+          animation: spin 1s ease-in-out infinite alternate both;
+  height: 100px;
+  position: relative;
+  width: 100px;
+}
+.loader svg:not(#circle-middle) {
+  -webkit-animation: spin 1s ease-in-out infinite alternate both;
+          animation: spin 1s ease-in-out infinite alternate both;
+  position: absolute;
+  top: -50%;
+  left: 0;
+  -webkit-transform-origin: bottom center;
+          transform-origin: bottom center;
+}
+
+.loader svg:nth-of-type(1):not(#circle-middle) {
+  -webkit-transform: rotate(30deg);
+          transform: rotate(30deg);
+}
+
+.loader svg:nth-of-type(2):not(#circle-middle) {
+  -webkit-transform: rotate(60deg);
+          transform: rotate(60deg);
+}
+
+.loader svg:nth-of-type(3):not(#circle-middle) {
+  -webkit-transform: rotate(90deg);
+          transform: rotate(90deg);
+}
+
+.loader svg:nth-of-type(4):not(#circle-middle) {
+  -webkit-transform: rotate(120deg);
+          transform: rotate(120deg);
+}
+
+.loader svg:nth-of-type(5):not(#circle-middle) {
+  -webkit-transform: rotate(150deg);
+          transform: rotate(150deg);
+}
+
+.loader svg:nth-of-type(6):not(#circle-middle) {
+  -webkit-transform: rotate(180deg);
+          transform: rotate(180deg);
+}
+
+.loader svg:nth-of-type(7):not(#circle-middle) {
+  -webkit-transform: rotate(210deg);
+          transform: rotate(210deg);
+}
+
+.loader svg:nth-of-type(8):not(#circle-middle) {
+  -webkit-transform: rotate(240deg);
+          transform: rotate(240deg);
+}
+
+.loader svg:nth-of-type(9):not(#circle-middle) {
+  -webkit-transform: rotate(270deg);
+          transform: rotate(270deg);
+}
+
+.loader svg:nth-of-type(10):not(#circle-middle) {
+  -webkit-transform: rotate(300deg);
+          transform: rotate(300deg);
+}
+
+.loader svg:nth-of-type(11):not(#circle-middle) {
+  -webkit-transform: rotate(330deg);
+          transform: rotate(330deg);
+}
+
+.loader svg:nth-of-type(12):not(#circle-middle) {
+  -webkit-transform: rotate(360deg);
+          transform: rotate(360deg);
+}
+
+.loader svg:nth-of-type(13):not(#circle-middle) {
+  -webkit-transform: rotate(390deg);
+          transform: rotate(390deg);
+}

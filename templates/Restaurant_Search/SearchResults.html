@@ -1,0 +1,257 @@
+{% extends 'Restaurant_Search/index.html' %}
+{% load static %}
+<head>
+    <style>    .rating {
+  display: inline-block;
+  position: relative;
+  height: 50px;
+  line-height: 50px;
+  font-size: 30px;
+}
+
+.rating label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  cursor: pointer;
+}
+
+.rating label:last-child {
+  position: static;
+}
+
+.rating label:nth-child(1) {
+  z-index: 5;
+}
+
+.rating label:nth-child(2) {
+  z-index: 4;
+}
+
+.rating label:nth-child(3) {
+  z-index: 3;
+}
+
+.rating label:nth-child(4) {
+  z-index: 2;
+}
+
+.rating label:nth-child(5) {
+  z-index: 1;
+}
+
+.rating label input {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+}
+
+.rating label .icon {
+  float: left;
+  color: transparent;
+}
+
+.rating label:last-child .icon {
+  color: #000;
+}
+
+.rating:not(:hover) label input:checked ~ .icon,
+.rating:hover label:hover input ~ .icon {
+  color: #ffd700;
+}
+
+.rating label input:focus:not(:checked) ~ .icon:last-child {
+  color: #000;
+  text-shadow: 0 0 5px #ffd700;
+}</style></head>
+
+{% block content %}
+
+
+<body>
+<section id="blog">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="block">
+                    
+                        <h1 class="heading"> {% if no_results %}<span>No Results in</span> {% else %}<span>Search Results in </span>{% endif %} "{{city}}" </h1>
+                       
+                        <ul>
+                       {% for key1,value1 in data.items %}
+                            <li class="wow fadeInLeft" data-wow-duration="300ms" data-wow-delay="300ms">
+                                <div class="{% cycle 'blog-img' 'blog-img' 'blog-img-2' 'blog-img-2' %}">
+                                    <img src=" {% static 'images/blog/blog-img' %}-{% cycle '1' '2' '3' '4' '5' '6' %}.jpg " alt="blog-img">
+                                </div>
+                                
+                                <div class="content-right">
+                                    <h3><a href="#price" onclick='javascript:loadRestaurant("{{key1}}","{{value1.name}}");'>{{value1.name}}</a></h3>
+                                    <p> Cusines : {{value1.cusine}}</p>
+                                    <p> Rating : <span class="badge badge-primary">{{value1.rating}}</span></p>
+                                    <p> Cost: ₹<span>{{value1.average_cost_for_two}}</span></p>
+                                </div>
+                            </li>
+                        {% endfor %}    
+                        </ul>
+                    </div>
+
+                        {% if no_results %}
+                          <div class="row">
+                        <div class="block">
+                            <a class="btn btn-default btn-more-info wow bounceIn" data-wow-duration="400ms" data-wow-delay="90ms" href="{% url 'home' %}" role="button">Search Again</a>
+                         </div>
+                         </div>
+                        {% else %}
+                        <div class="row">
+                        <div class="block">
+                            <a class="btn btn-default btn-more-info wow bounceIn" data-wow-duration="400ms" data-wow-delay="90ms" href="#" role="button">More Info&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
+                            <a class="btn btn-default btn-more-info wow bounceIn" data-wow-duration="500ms" data-wow-delay="100ms" href="{% url 'home' %}" role="button">Search Again</a>
+                        </div>
+                        </div>
+                        {% endif %}
+                        
+                </div><!-- .col-md-12 close -->
+            </div><!-- .row close -->
+        </div><!-- .containe close -->
+    </section><!-- #blog close -->
+
+            
+
+
+
+    <section id="price" style="display:none">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="block">
+                        <h1 class="heading wow fadeInUp" data-wow-duration="300ms" data-wow-delay="300ms"><span>Ratings</span> and <span>User Comments</span></h1>
+                        <div class="pricing-list">
+                        <div class="title" id="Restaurant_name">
+                                
+                            </div>
+                            <ul>
+                                <div id="search_results">
+
+                                </div>
+                            <ul>
+                           
+                               
+
+                        </div>
+                    </div>
+                </div><!-- .col-md-12 close -->
+            </div><!-- .row close -->
+        </div><!-- .containe close -->
+    </section><!-- #price close -->
+
+    <!-- The Modal -->
+            <div class="modal" id="myComments">
+            <div class="modal-dialog">
+                <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">          
+                    <h4 class="title modal-title"><span style="color:#ff530;">Top 10 comments enterted in this site are...</span></h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <ul class="list-group">
+                        <div id="comment-list-section">
+
+                        </div>
+                    <ul>
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                </div>
+
+                </div>
+            </div>
+            </div>
+
+
+    <!--
+            subscribe start
+            ============================ -->
+
+</body>
+
+{% block loader %}
+{{ block.super }}
+{% endblock loader %}
+
+
+    
+<script>
+function loadRestaurant(res_id,name){
+     $("body").css({'opacity': '0.2',});
+     $(".loader").show();
+    var res_id = res_id;
+    var res_name = name;
+    $.ajax({
+        type: 'POST',
+        url: '{% url 'searchRestaurant' %}?res_id='+res_id,
+        success:function(data){
+         //   console.log(data);
+            $("body").css({'opacity': '1.0',});
+            $(".loader").hide();
+            var Restaurant_name = '<table>'+
+                                    '<tr><th><h4><span>Restaurant Name</th><td>:&nbsp;</span>'+res_name+'</h4></td></tr>'+
+                                    '<tr><th><h4><span>Category</th><td>:&nbsp;</span>'+data["establishment"]+'</h4></td></tr>'+
+                                    '<tr><th><h4><span>Timings </th><td>:&nbsp;</span>'+data["timings"]+'</h4></td></tr>'+
+                                    '<tr><th><h4><span>Highlights</th><td>:&nbsp; </span>'+data["highlights"]+'</h4></td></tr>'+
+                                    '<tr><th><h4><span>Address</th><td>:&nbsp;</span>'+data["location"]['address']+'</h4></td></tr>'+
+                                    '<tr><th><h4><span>Contact</th><td>:&nbsp;</span>'+data["phone_numbers"]+'</h4></td></tr>'+
+                                    '<tr><th><h4><span>Menu</th><td>:&nbsp;</span><a target="_blank" href="'+data["menu_url"]+'">Go To Menu</a></h4></td></tr>'+
+                                    '<tr><th><h4><span>Photos URL</th><td>:&nbsp;</span><a target="_blank" href="'+data["photos_url"]+'">View the Restaurant Photos</a></h4></td></tr>'+
+                                    '<tr><th><h4><span>Order Now</th><td>:&nbsp;</span><a target="_blank" href="'+data["photos_url"]+'">Order Now!!!</a></h4></td></tr>'+
+                                    '<tr><th><h4><span>Restaurant URL</th><td>:&nbsp;</span><a target="_blank" href="'+data["url"]+'">Go To Restaurant Page</a></h4></td></tr>'+
+                                    '</table>';
+
+            var content = "";
+            if (data["all_reviews"]['reviews'].length == 0){
+                content += '<h2 class="title"><span> SORRY! No reviews found for this restaurant!!! &#128579;</span></h2>';
+            }
+            else{
+            for(let i=0; i< data["all_reviews"]['reviews'].length; i++){
+                content += '<li class="wow fadeInUp" data-wow-duration="300ms" data-wow-delay="300ms">'+
+                                    '<div class="item">'+
+                                        '<div class="item-title">'+
+                                            '<h2>'+data["all_reviews"]['reviews'][i]["review"]["user"]["name"]+'</h2>'+
+                                            '<div class="border-bottom"></div>'+
+                                            '<span>Rating:'+data['all_reviews']['reviews'][i]['review']['rating']+'/5 </span>'+
+                                        '</div>'+
+                                        '<p>'+data['all_reviews']['reviews'][i]['review']['review_text']+'</p>'+
+                                    '</div>'+
+                                '</li>';
+                                
+                   }
+            }
+            $("#price").show();
+            $("#subscribe").show();
+            $('#Restaurant_name').html(Restaurant_name);
+            $('#search_results').html(content);
+            document.getElementById('res_name').value = res_name;
+
+        }
+
+    })
+   
+}
+
+
+
+
+                            
+
+
+</script>
+
+</html>
+{% endblock content %}
